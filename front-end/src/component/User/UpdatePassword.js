@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import "./UpdatePassword.css";
+import "../User/Usercss/UpdatePassword.css";
 import Loader from "../layout/Loader/loader";
 import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, updatePassword } from "../../actions/userAction";
@@ -9,10 +9,12 @@ import MetaData from "../layout/MetaData";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import LockIcon from "@material-ui/icons/Lock";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
+import { useNavigate } from "react-router-dom";
 
 const UpdatePassword = ({ history }) => {
   const dispatch = useDispatch();
   const alert = useAlert();
+  const navigate = useNavigate();
 
   const { error, isUpdated, loading } = useSelector((state) => state.profile);
 
@@ -23,35 +25,34 @@ const UpdatePassword = ({ history }) => {
   const updatePasswordSubmit = (e) => {
     e.preventDefault();
 
-    const myForm = new FormData();
-
-    myForm.set("oldPassword", oldPassword);
-    myForm.set("newPassword", newPassword);
-    myForm.set("confirmPassword", confirmPassword);
 
     let userObject = {
         oldPassword,newPassword,confirmPassword
-      }
-
+    }
+      console.log(userObject)
     dispatch(updatePassword(userObject));
   };
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      // alert.error(error)
       dispatch(clearErrors());
     }
 
     if (isUpdated) {
-      alert.success("Profile Updated Successfully");
+      alert.success("Password Updated Successfully");
 
-      history.push("/account");
+      navigate("/account");
 
       dispatch({
         type: UPDATE_PASSWORD_RESET,
       });
     }
-  }, [dispatch, error, alert, history, isUpdated]);
+  }, [dispatch, error, alert,isUpdated]);
+
+  const changeHandler = (event) => {
+    navigate('/account')
+  }
 
   return (
     <Fragment>
@@ -72,7 +73,7 @@ const UpdatePassword = ({ history }) => {
                   <VpnKeyIcon />
                   <input
                     type="password"
-                    placeholder="Old Password"
+                    placeholder="Enter your Old Password"
                     required
                     value={oldPassword}
                     onChange={(e) => setOldPassword(e.target.value)}
@@ -83,7 +84,7 @@ const UpdatePassword = ({ history }) => {
                   <LockOpenIcon />
                   <input
                     type="password"
-                    placeholder="New Password"
+                    placeholder="Enter your New Password"
                     required
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
@@ -93,7 +94,7 @@ const UpdatePassword = ({ history }) => {
                   <LockIcon />
                   <input
                     type="password"
-                    placeholder="Confirm Password"
+                    placeholder="Again Enter new password to Confirm"
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -101,7 +102,7 @@ const UpdatePassword = ({ history }) => {
                 </div>
                 <input
                   type="submit"
-                  value="Change"
+                  value="Reset Password" onClick={() => changeHandler()}
                   className="updatePasswordBtn"
                 />
               </form>
