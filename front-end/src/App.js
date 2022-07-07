@@ -21,24 +21,12 @@ import ConfirmOrder from "./component/Cart/ConfirmOrder";
 import OrderSuccess from "./component/Cart/OrderSuccess";
 import MyOrders from "./component/Order/MyOrders";
 import OrderDetails from "./component/Order/OrderDetails";
-import Dashboard from "./component/Admin/Dashboard.js";
-import ProductList from "./component/Admin/ProductList.js";
-// import NewProduct from "./component/Admin/NewProduct";
 
 
 
 
 function App(){
   const { isAuthenticated, user } = useSelector((state) => state.user);
-
-  // React.useEffect(() => {
-  //   WebFont.load({
-  //     google: {
-  //       families: ["Roboto", "Droid Sans", "Chilanka"],
-  //     },
-  //   });
-  //   // store.dispatch(loadUser());
-  //   }, [])  
 
     return (
       <Router>
@@ -63,22 +51,7 @@ function App(){
          <Route extact path="/order/confirm" element={<ConfirmOrder/>} />
          <Route extact path="/orders" element={<MyOrders/>} />
          <Route extact path="/order/:id" element={<OrderDetails/>} />
-         <Route extact path="/admin/dashboard" element={<Dashboard/>} />
          <Route extact path="/success" element={<OrderSuccess/>} />
-         <Route
-          isAdmin={true}
-          exact
-          path="/admin/dashboard"
-          element={Dashboard}
-        />
-        <Route
-          exact
-          path="/admin/products"
-          isAdmin={true}
-          element={ProductList}
-        />
-       
-
       </Routes>
       <Footer/>
     </Router>
