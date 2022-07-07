@@ -13,6 +13,7 @@ const Search = ({ history }) => {
     console.log("from search...",keyword)
     e.preventDefault();
     if (keyword.trim()) {
+    //   history.push(`/products/${keyword}`);
     navigate(`/products/${keyword}`)
     } else {
       navigate('/products');
