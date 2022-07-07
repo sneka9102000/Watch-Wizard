@@ -55,16 +55,7 @@ function App(){
 
          <Route exact path="/account" element={<Profile/>} />
          <Route exact path="/me/update" element={<UpdateProfile/>} />
-         <Route exact path="/password/update" element={<UpdatePassword/>} />
-
-         {/* <Route exact path='/account' element={<ProtectedRoute/>}>
-            <Route exact path='/account' element={<Profile />}/>
-          </Route> */}
-          {/* <Route exact path='/account'  >
-            <Profile />
-          </Route> */}
-
-          
+         <Route exact path="/password/update" element={<UpdatePassword/>} /> 
          <Route extact path="/cart" element={<Cart/>} />
  
          <Route extact path="/login" element={<LoginSignUp/>} />
@@ -86,15 +77,10 @@ function App(){
           isAdmin={true}
           element={ProductList}
         />
-        {/* <Route
-          exact
-          path="/admin/product"
-          isAdmin={true}
-          element={NewProduct}
-        /> */}
+       
 
       </Routes>
-      {/* <Footer/> */}
+      <Footer/>
     </Router>
 
   );
