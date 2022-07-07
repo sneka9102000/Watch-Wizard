@@ -10,16 +10,21 @@ import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ValidateLogin from "../../utils/validateLogin";
+import ValidateRegister from "../../utils/validateRegister";
+
 
 
 const LoginSignUp = ({ location }) => {
-  //console.log("hello hi")
   const dispatch = useDispatch();
   const alert = useAlert();
   const navigate = useNavigate();
 
   let [emailError, setEmailError] = useState("");
   let [passwordError, setPasswordError] = useState("");
+  let [nameError, setNameError] = useState("");
+
+  let [loginEmailError, setLoginEmailError] = useState("");
+  let [loginPasswordError, setLoginPasswordError] = useState("");
 
   const { error, isAuthenticated } = useSelector(
     (state) => state.user
@@ -46,29 +51,54 @@ const LoginSignUp = ({ location }) => {
   const [avatar, setAvatar] = useState("/Profile.png");
   const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
 
-  const validate = () => {
+  const validRegister = () => {
+    console.log("in validate Register")
 
-    console.log("Cred : "+loginEmail, loginPassword);
+    const error = ValidateRegister(name,email,password)
+
+    let nameError = error.nameError;
+    let emailError = error.emailError;
+    let passwordError = error.passwordError;
+
+    const nameField = document.getElementById('name');
+    const emailField = document.getElementById('email');
+    const passwordField = document.getElementById('password');
+
+    if(nameError) {
+        setNameError(nameError);
+    } 
+    
+    if(emailError) {
+        setEmailError(emailError);
+    }
+    
+    if (passwordError) {
+        setPasswordError(passwordError)
+    }
+
+    if(nameError || emailError || passwordError) {
+        return false;
+    }
+
+    return true
+
+}
+
+  const validLogin = () => {
+
+    // console.log("Cred : " + loginEmail, loginPassword);
 
     const error = ValidateLogin(loginEmail, loginPassword)
 
     let emailError = error.emailError;
     let passwordError = error.passwordError;
 
-    console.log("Errors : "+emailError, passwordError)
-
     if (emailError) {
-      setEmailError(emailError);
-      emailField.classList.add('is-invalid')
-    } else {
-      emailField.classList.remove('is-invalid')
+      setLoginEmailError(emailError);
     }
 
     if (passwordError) {
-      setPasswordError(passwordError)
-      passwordField.classList.add('is-invalid')
-    } else {
-      passwordField.classList.remove('is-invalid')
+      setLoginPasswordError(passwordError)
     }
 
     if (emailError || passwordError) {
@@ -80,20 +110,27 @@ const LoginSignUp = ({ location }) => {
 
 
   const loginSubmit = (e) => {
-    //console.log("submitted")
     e.preventDefault();
-    const isValid = validate();
-
-    dispatch(login(loginEmail, loginPassword))
+    const isValid = validLogin();
+    console.log(isValid)
+    if (isValid) {
+      dispatch(login(loginEmail, loginPassword))
+    }
   };
   const registerSubmit = (e) => {
     e.preventDefault();
 
+    const isValid = validRegister()
+
+    console.log("Valid statement: "+isValid)
+
     let userObject = {
       name, email, password, avatar, avatarPreview
     }
-    console.log("user object ", userObject)
-    dispatch(register(userObject))
+
+    if (isValid) {
+      dispatch(register(userObject))
+    }
   };
 
 
@@ -158,8 +195,8 @@ const LoginSignUp = ({ location }) => {
             <button ref={switcherTab}></button>
           </div>
           <form className="loginForm" ref={loginTab} onSubmit={loginSubmit}>
-            <div className="loginEmail" style={{display:"inline"}}>
-              <MailOutlineIcon style={{margin:"1% 0 0 0"}} />
+            <div className="loginEmail">
+              <MailOutlineIcon style={{ margin: "1% 0 0 0" }} />
               <input
                 type="text"
                 placeholder="Enter your Email Id"
@@ -167,18 +204,18 @@ const LoginSignUp = ({ location }) => {
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}
               />
-              <strong>{emailError}</strong>
-          </div>
-            <div className="loginPassword" style={{display:"inline"}}>
-              <LockOpenIcon style={{margin:"1% 0 0 0"}} />
+              <strong>{loginEmailError}</strong>
+            </div>
+            <div className="loginPassword">
+              <LockOpenIcon style={{ margin: "1% 0 0 0" }} />
               <input
                 type="password"
                 placeholder="Enter the Password"
                 id="password"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
-              /><br/>
-              <strong >{passwordError}</strong>
+              /><br />
+              <strong >{loginPasswordError}</strong>
             </div>
             <Link to="/password/forgot">Forget Password ?</Link>
             <input type="submit" value="Login" className="loginBtn" />
@@ -189,38 +226,41 @@ const LoginSignUp = ({ location }) => {
             encType="multipart/form-data"
             onSubmit={registerSubmit}
           >
-            <div className="signUpName">
-              <FaceIcon />
+            <div className="signUpName" >
+              <FaceIcon style={{ margin: "1% 0 0 0" }}/>
               <input
                 type="text"
                 placeholder="Enter your Name"
-                required
+                id="username"
                 name="name"
                 value={name}
                 onChange={registerDataChange}
               />
+              <strong>{nameError}</strong>
             </div>
             <div className="signUpEmail">
-              <MailOutlineIcon />
+              <MailOutlineIcon style={{ margin: "1% 0 0 0" }}/>
               <input
                 type="email"
                 placeholder="Enter your Email Id"
-                required
+                id="useremail"
                 name="email"
                 value={email}
                 onChange={registerDataChange}
               />
+              <strong>{emailError}</strong>
             </div>
             <div className="signUpPassword">
-              <LockOpenIcon />
+              <LockOpenIcon style={{ margin: "1% 0 0 0" }} />
               <input
                 type="password"
                 placeholder="Enter the Password"
-                required
+                id="userpassword"
                 name="password"
                 value={password}
                 onChange={registerDataChange}
               />
+              <strong>{passwordError}</strong>
             </div>
 
             <div id="registerImage">

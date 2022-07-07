@@ -6,17 +6,22 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors")
 class ProductController {
   createProduct = catchAsyncErrors(async (req, res, next) => {
 
-    req.body.user=req.user.id;
+  try{req.body.user=req.user.id;
     const product = await Product.create(req.body);
 
     res.status(201).json({
         success:true,
         product,
     });
+  }
+  catch (err) {
+    res.status(500).json({error: err})
+  }
 });
 // Get All Product
 getAllProducts = catchAsyncErrors(async (req, res, next) => {
-  const resultPerPage = 8;
+
+try{const resultPerPage = 8;
   const productsCount = await Product.countDocuments();
 
   const apiFeature = new ApiFeatures(Product.find(), req.query)
@@ -38,6 +43,10 @@ getAllProducts = catchAsyncErrors(async (req, res, next) => {
     resultPerPage,
     filteredProductsCount,
   });
+}
+catch (err) {
+  res.status(500).json({error: err})
+}
 });
 
 
@@ -45,26 +54,36 @@ getAllProducts = catchAsyncErrors(async (req, res, next) => {
 
 getAllProducts =catchAsyncErrors(async(req,res,next) => {
 
-    const  products = await Product.find();
+try{ const  products = await Product.find();
     res.status(200).json ({
         sucess:true,
         products,
     })
+  }
+  catch (err) {
+    res.status(500).json({error: err})
+  }
 });
 
 // Get All Product (Admin)
 getAdminProducts = catchAsyncErrors(async (req, res, next) => {
-  const products = await Product.find();
+
+try{const products = await Product.find();
 
   res.status(200).json({
     success: true,
     products,
   });
+}
+catch (err) {
+  res.status(500).json({error: err})
+}
 });
 //get product details
 
 getProductDetails = catchAsyncErrors(async (req, res, next) => {
-    const product = await Product.findById(req.params.id);
+
+try{ const product = await Product.findById(req.params.id);
 
     if(!product){
         return next(new ErrorHandler("Product not found",404));
@@ -74,12 +93,17 @@ getProductDetails = catchAsyncErrors(async (req, res, next) => {
         success: true,
         product,
     });
+  }
+  catch (err) {
+    res.status(500).json({error: err})
+  }
 });
 
 //update product --admin
 
 updateProduct = catchAsyncErrors(async(req,res,next)=>{
-    let product = await Product.findById(req.params.id);
+
+  try{let product = await Product.findById(req.params.id);
 
     if(!product){
         return next(new ErrorHandler("Product not found",404));
@@ -95,12 +119,16 @@ updateProduct = catchAsyncErrors(async(req,res,next)=>{
         success: true,
         product,
     });
+  }
+  catch (err) {
+    res.status(500).json({error: err})
+  }
 });
 
 //delete product
 
 deleteProduct = catchAsyncErrors(async(req,res,next) =>{
-    const product = await Product.findById(req.params.id);
+  try{const product = await Product.findById(req.params.id);
 
     if(!product){
         return next(new ErrorHandler("Product not found",404));
@@ -112,11 +140,16 @@ deleteProduct = catchAsyncErrors(async(req,res,next) =>{
         success: true,
         message: "Product Delete Successfully",
     });
+  }
+  catch (err) {
+    res.status(500).json({error: err})
+  }
 });
 
 // Create New Review or Update the review
 createProductReview = catchAsyncErrors(async (req, res, next) => {
-    const { rating, comment, productId } = req.body;
+
+  try{const { rating, comment, productId } = req.body;
   
     const review = {
       user: req.user._id,
@@ -153,12 +186,17 @@ createProductReview = catchAsyncErrors(async (req, res, next) => {
   
     res.status(200).json({
       success: true,
-    });
-  });
+    }); 
+ }
+ catch (err) {
+  res.status(500).json({error: err})
+}
+
+ });
 
   // Get All Reviews of a product
 getProductReviews = catchAsyncErrors(async (req, res, next) => {
-    const product = await Product.findById(req.query.id);
+  try{const product = await Product.findById(req.query.id);
   
     if (!product) {
       return next(new ErrorHandler("Product not found", 404));
@@ -168,11 +206,16 @@ getProductReviews = catchAsyncErrors(async (req, res, next) => {
       success: true,
       reviews: product.reviews,
     });
+  }
+  catch (err) {
+    res.status(500).json({error: err})
+  }
   });
 
   // Delete Review
 deleteReview = catchAsyncErrors(async (req, res, next) => {
-    const product = await Product.findById(req.query.productId);
+try{
+  const product = await Product.findById(req.query.productId);
   
     if (!product) {
       return next(new ErrorHandler("Product not found", 404));
@@ -215,7 +258,11 @@ deleteReview = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
       success: true,
     });
-  });
+  }
+  catch (err) {
+    res.status(500).json({error: err})
+  }
+});
 }
 
 module.exports = ProductController;

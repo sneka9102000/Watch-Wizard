@@ -56,10 +56,42 @@ function App(){
          <Route exact path="/account" element={<Profile/>} />
          <Route exact path="/me/update" element={<UpdateProfile/>} />
          <Route exact path="/password/update" element={<UpdatePassword/>} />
+
+         {/* <Route exact path='/account' element={<ProtectedRoute/>}>
+            <Route exact path='/account' element={<Profile />}/>
+          </Route> */}
+          {/* <Route exact path='/account'  >
+            <Profile />
+          </Route> */}
+
+          
+         <Route extact path="/cart" element={<Cart/>} />
+ 
          <Route extact path="/login" element={<LoginSignUp/>} />
+         <Route extact path="/shipping" element={<Shipping/>} />
+         <Route extact path="/order/confirm" element={<ConfirmOrder/>} />
          <Route extact path="/orders" element={<MyOrders/>} />
          <Route extact path="/order/:id" element={<OrderDetails/>} />
-         
+         <Route extact path="/admin/dashboard" element={<Dashboard/>} />
+         <Route extact path="/success" element={<OrderSuccess/>} />
+         <Route
+          isAdmin={true}
+          exact
+          path="/admin/dashboard"
+          element={Dashboard}
+        />
+        <Route
+          exact
+          path="/admin/products"
+          isAdmin={true}
+          element={ProductList}
+        />
+        {/* <Route
+          exact
+          path="/admin/product"
+          isAdmin={true}
+          element={NewProduct}
+        /> */}
 
       </Routes>
       {/* <Footer/> */}

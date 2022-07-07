@@ -22,6 +22,7 @@ import {
 export const getProduct =   (keyword = "", currentPage = 1, price = [0, 25000], category, ratings = 0) => async (dispatch) => {
     try{
         dispatch({ type: ALL_PRODUCT_REQUEST });
+        console.log("keyword : ",keyword)
         let link=`http://localhost:5050/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}`;
 
         if(category) {
@@ -29,6 +30,7 @@ export const getProduct =   (keyword = "", currentPage = 1, price = [0, 25000], 
 
         }
         const { data } = await axios.get(link);
+        console.log("data : ",data)
         dispatch({
             type: ALL_PRODUCT_SUCCESS,
             payload: data,
@@ -109,7 +111,7 @@ export const getProductDetails = (id) => async (dispatch) => {
     }
   };
 
-  // NEW REVIEW
+  // NEW REVIEWproductController
 export const newReview = (reviewData) => async (dispatch) => {
   try {
     dispatch({ type: NEW_REVIEW_REQUEST });
